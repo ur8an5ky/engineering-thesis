@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'betting_game',
     'betting_game_api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
