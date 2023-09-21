@@ -44,6 +44,6 @@ class Penalties(models.Model):
     penalties_team1 = models.PositiveIntegerField()
     penalties_team2 = models.PositiveIntegerField()
 
-    def __str__(self):
-        return f"Penalties for Match {self.id_match}"
+    # def __str__(self):
+    #     return f"Penalties for Match {self.id_match}"
     
