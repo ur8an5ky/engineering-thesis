@@ -38,11 +38,11 @@ const footers = [
 		description: ['About me', 'About this page', 'Rules'],
 	},
 	{
-		title: 'Groups',
+		title: 'Groups 1',
 		description: ['Group A', 'Group B', 'Group C', 'Group D'],
 	},
     {
-		title: 'Groups',
+		title: 'Groups 2',
 		description: ['Group E', 'Group F', 'Group G', 'Group H'],
 	},
 	{
@@ -59,7 +59,7 @@ function Footer() {
 	return (
 		<React.Fragment>
 			<Container maxWidth="md" component="footer" className={classes.footer}>
-				<Grid container spacing={4} justify="space-evenly">
+				<Grid container spacing={4} justifyContent="space-evenly">
 					{footers.map((footer) => (
 						<Grid item xs={6} sm={3} key={footer.title}>
 							<Typography variant="h6" color="textPrimary" gutterBottom>

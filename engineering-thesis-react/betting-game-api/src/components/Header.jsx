@@ -7,10 +7,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   appBar: {
-    backgroundColor: '#1a1a1a', // Set your desired background color
-    position: 'fixed', // Fixed position to keep it at the top
-    width: '100%', // Take up the full width of the viewport
-    top: 0, // Position it at the very top
+    backgroundColor: '#1a1a1a',
+    // position: 'fixed',
+    width: '100%', 
+    top: 0,
   },
   title: {
     flexGrow: 1,

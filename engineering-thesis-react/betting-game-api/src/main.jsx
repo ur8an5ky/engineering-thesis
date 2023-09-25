@@ -1,14 +1,31 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Matches from './components/Matches';
+import MatchDetail from './components/MatchDetail';
+import Teams from './components/Teams';
+import TeamDetail from './components/TeamDetail';
+import GroupDetail from './components/GroupDetail';
+import CountryDetail from './components/CountryDetail';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-        <Header />
-        <App />
-        <Footer />
-    </React.StrictMode>
-)
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/matches" element={<Matches />} />
+        <Route path="/match/:id" element={<MatchDetail />} />
+        <Route path="/teams" element={<Teams />} />
+        <Route path="/team/:id" element={<TeamDetail />} />
+        <Route path="/group/:group" element={<GroupDetail />} />
+        <Route path="/country/:country" element={<CountryDetail />} />
+      </Routes>
+      <Footer />
+    </Router>
+  </React.StrictMode>
+);
