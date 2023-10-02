@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('betting_game.urls', namespace='betting_game')),
     path('api/', include('betting_game_api.urls', namespace='betting_game_api')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

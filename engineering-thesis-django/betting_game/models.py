@@ -44,6 +44,15 @@ class Penalties(models.Model):
     penalties_team1 = models.PositiveIntegerField()
     penalties_team2 = models.PositiveIntegerField()
 
-    # def __str__(self):
-    #     return f"Penalties for Match {self.id_match}"
-    
+
+class Guesses(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_match = models.ForeignKey(FootballMatches, on_delete=models.CASCADE, related_name='match_guesses')
+    guess_hosts_score = models.PositiveIntegerField()
+    guess_visitors_score = models.PositiveIntegerField()
+    points = models.PositiveIntegerField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_guesses')
+
+    def __str__(self):
+        return f"{self.user} guessed {self.guess_hosts_score} - {self.guess_visitors_score} for match {self.id_match}"
+

@@ -1,18 +1,30 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from betting_game.models import FootballMatches, FootballTeams, Penalties
+from rest_framework.permissions import BasePermission, IsAdminUser, IsAuthenticated, AllowAny, BasePermission, SAFE_METHODS
+from betting_game.models import FootballMatches, FootballTeams, Penalties, Guesses
 from django.db.models import Q
-from .serializers import TeamsSerializer, MatchesSerializer
+from .serializers import TeamsSerializer, MatchesSerializer, GuessesSerializer
 
+class IsAdminOrReadOnly(BasePermission):
+    """
+    The request is authenticated as an admin, or is a read-only request.
+    """
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user and request.user.is_staff
 
 class FootballTeamsList(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
     queryset = FootballTeams.ftobjects.all()
     serializer_class = TeamsSerializer
-
+    http_method_names = ['get']
 
 class FootballTeamsDetail(generics.RetrieveDestroyAPIView):
+    permission_classes = [AllowAny]
     serializer_class = TeamsSerializer
+    http_method_names = ['get']
 
     def get_queryset(self):
         return FootballTeams.objects.all()
@@ -31,15 +43,21 @@ class FootballTeamsDetail(generics.RetrieveDestroyAPIView):
 
 
 class FootballMatchesList(generics.ListCreateAPIView):
+    permission_classes = [IsAdminOrReadOnly]
     queryset = FootballMatches.fmobjects.all()
     serializer_class = MatchesSerializer
 
-
-class FootballMatchesDetail(generics.RetrieveDestroyAPIView):
+class FootballMatchesDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminOrReadOnly]
     queryset = FootballMatches.objects.all()
     serializer_class = MatchesSerializer
 
+
+
 class Group(APIView):
+    permission_classes = [AllowAny]
+    http_method_names = ['get']
+
     def get(self, request, group, format=None):
         teams = FootballTeams.objects.filter(group=group.upper())
         matches = FootballMatches.objects.filter(phase='group', id_hosts__group=group.upper())
@@ -53,10 +71,35 @@ class Group(APIView):
         })
     
 class Country(APIView):
+    permission_classes = [AllowAny]
+    http_method_names = ['get']
+
     def get(self, request, country, format=None):
         teams = FootballTeams.objects.filter(country=country.capitalize())
         serializer = TeamsSerializer(teams, many=True)
         return Response(serializer.data)
+    
+class GuessesList(APIView):
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get']
+
+    def get(self, request, format=None):
+        user_guesses = Guesses.objects.filter(user=request.user)
+        guesses_serializer = GuessesSerializer(user_guesses, many=True)
+
+        all_matches = FootballMatches.objects.all()
+        matches_serializer = MatchesSerializer(all_matches, many=True)
+
+        all_teams = FootballTeams.objects.all()
+        teams_serializer = TeamsSerializer(all_teams, many=True)
+
+        return Response({
+            'my_guesses': guesses_serializer.data,
+            'matches': matches_serializer.data,
+            'teams': teams_serializer.data
+        })
+
+
 
 """ Concrete View Classes
 #CreateAPIView

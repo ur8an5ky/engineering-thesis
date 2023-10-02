@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import FootballTeamsList, FootballTeamsDetail, FootballMatchesList, FootballMatchesDetail, Group, Country
+from .views import FootballTeamsList, FootballTeamsDetail, FootballMatchesList, FootballMatchesDetail, Group, Country, GuessesList
 
 app_name = 'betting_game_api'
 
@@ -10,4 +10,5 @@ urlpatterns = [
     path('matches/', FootballMatchesList.as_view(), name='matches'),
     path('group/<str:group>/', Group.as_view(), name='group'),
     path('country/<str:country>/', Country.as_view(), name='country'),
+    path('my-guesses/', GuessesList.as_view(), name='my-guesses'),
 ]
