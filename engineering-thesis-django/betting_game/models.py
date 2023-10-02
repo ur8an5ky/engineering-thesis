@@ -1,6 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.utils import timezone
+from django.conf import settings
 
 
 class FootballTeams(models.Model):
@@ -51,7 +52,7 @@ class Guesses(models.Model):
     guess_hosts_score = models.PositiveIntegerField()
     guess_visitors_score = models.PositiveIntegerField()
     points = models.PositiveIntegerField(default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_guesses')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_guesses')
 
     def __str__(self):
         return f"{self.user} guessed {self.guess_hosts_score} - {self.guess_visitors_score} for match {self.id_match}"
