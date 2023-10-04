@@ -4,6 +4,8 @@ import App from './App.jsx';
 import './index.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Register from './components/Register';
+import Login from './components/Login';
 import Matches from './components/Matches';
 import MatchDetail from './components/MatchDetail';
 import Teams from './components/Teams';
@@ -24,6 +26,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/team/:id" element={<TeamDetail />} />
         <Route path="/group/:group" element={<GroupDetail />} />
         <Route path="/country/:country" element={<CountryDetail />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
     </Router>
