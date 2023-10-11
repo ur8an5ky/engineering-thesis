@@ -12,6 +12,7 @@ import Teams from './components/Teams';
 import TeamDetail from './components/TeamDetail';
 import GroupDetail from './components/GroupDetail';
 import CountryDetail from './components/CountryDetail';
+import MyGuesses from './components/MyGuesses';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/team/:id" element={<TeamDetail />} />
         <Route path="/group/:group" element={<GroupDetail />} />
         <Route path="/country/:country" element={<CountryDetail />} />
+        <Route path="/my-guesses" element={<MyGuesses />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>
