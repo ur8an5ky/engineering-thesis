@@ -1,7 +1,10 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import BasePermission, IsAdminUser, IsAuthenticated, AllowAny, BasePermission, SAFE_METHODS
+from rest_framework.decorators import api_view
+
 from betting_game.models import FootballMatches, FootballTeams, Penalties, Guesses
 from django.db.models import Q
 from .serializers import TeamsSerializer, MatchesSerializer, GuessesSerializer
@@ -41,7 +44,6 @@ class FootballTeamsDetail(generics.RetrieveDestroyAPIView):
             'matches': matches_serializer.data
         })
 
-
 class FootballMatchesList(generics.ListCreateAPIView):
     permission_classes = [IsAdminOrReadOnly]
     queryset = FootballMatches.fmobjects.all()
@@ -51,8 +53,6 @@ class FootballMatchesDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminOrReadOnly]
     queryset = FootballMatches.objects.all()
     serializer_class = MatchesSerializer
-
-
 
 class Group(APIView):
     permission_classes = [AllowAny]
@@ -69,7 +69,7 @@ class Group(APIView):
             'teams': teams_serializer.data,
             'matches': matches_serializer.data
         })
-    
+
 class Country(APIView):
     permission_classes = [AllowAny]
     http_method_names = ['get']
@@ -78,8 +78,9 @@ class Country(APIView):
         teams = FootballTeams.objects.filter(country=country.capitalize())
         serializer = TeamsSerializer(teams, many=True)
         return Response(serializer.data)
-    
+
 class GuessesList(APIView):
+    authentication_classes = [JWTAuthentication] 
     permission_classes = [IsAuthenticated]
     http_method_names = ['get']
 
@@ -98,6 +99,35 @@ class GuessesList(APIView):
             'matches': matches_serializer.data,
             'teams': teams_serializer.data
         })
+
+@api_view(['POST'])
+def add_guess(request):
+    user = request.user
+    id_match = request.data.get('id_match')
+    guess_hosts_score = request.data.get('guess_hosts_score')
+    guess_visitors_score = request.data.get('guess_visitors_score')
+    
+    match = FootballMatches.objects.get(id_match=id_match)
+
+    guess = Guesses(user=user, id_match=match, guess_hosts_score=guess_hosts_score, guess_visitors_score=guess_visitors_score)
+    guess.save()
+    
+    return Response({"message": "Guess added successfully!"}, status=status.HTTP_201_CREATED)
+
+@api_view(['PUT'])
+def update_guess(request, match_id):
+    user = request.user
+    guess_hosts_score = request.data.get('guess_hosts_score')
+    guess_visitors_score = request.data.get('guess_visitors_score')
+    
+    try:
+        guess = Guesses.objects.get(user=user, id_match=match_id)
+        guess.guess_hosts_score = guess_hosts_score
+        guess.guess_visitors_score = guess_visitors_score
+        guess.save()
+        return Response({"message": "Guess updated successfully!"}, status=status.HTTP_200_OK)
+    except Guesses.DoesNotExist:
+        return Response({"error": "Guess not found!"}, status=status.HTTP_404_NOT_FOUND)
 
 
 

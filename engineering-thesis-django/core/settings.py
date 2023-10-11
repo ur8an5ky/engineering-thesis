@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'betting_game',
     'betting_game_api',
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
     'users',
 ]
