@@ -36,6 +36,7 @@ class FootballMatches(models.Model):
     isPenalties = models.BooleanField(default=False)
     objects = models.Manager()
     fmobjects = FootballMatchesObjects()
+    toVerifyPoints = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.id_hosts} vs {self.id_visitors} - {self.start}"

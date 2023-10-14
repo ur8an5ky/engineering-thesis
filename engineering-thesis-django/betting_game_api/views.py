@@ -3,11 +3,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import BasePermission, IsAdminUser, IsAuthenticated, AllowAny, BasePermission, SAFE_METHODS
-from rest_framework.decorators import api_view
-
+from rest_framework.decorators import api_view, permission_classes
 from betting_game.models import FootballMatches, FootballTeams, Penalties, Guesses
 from django.db.models import Q
-from .serializers import TeamsSerializer, MatchesSerializer, GuessesSerializer
+from .serializers import TeamsSerializer, MatchesSerializer, GuessesSerializer, MatchUpdateSerializer
 
 class IsAdminOrReadOnly(BasePermission):
     """
@@ -99,6 +98,11 @@ class GuessesList(APIView):
             'matches': matches_serializer.data,
             'teams': teams_serializer.data
         })
+    
+class MatchUpdateView(generics.UpdateAPIView):
+    permission_classes = [IsAdminUser]
+    queryset = FootballMatches.objects.all()
+    serializer_class = MatchUpdateSerializer
 
 @api_view(['POST'])
 def add_guess(request):
@@ -129,6 +133,20 @@ def update_guess(request, match_id):
     except Guesses.DoesNotExist:
         return Response({"error": "Guess not found!"}, status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def update_match(request, match_id):
+    try:
+        match = FootballMatches.objects.get(id_match=match_id)
+        
+        # Updating the match based on incoming data
+        match.score_hosts = request.data.get('score_hosts')
+        match.score_visitors = request.data.get('score_visitors')
+        match.save()
+        
+        return Response({"message": "Match updated successfully!"}, status=status.HTTP_200_OK)
+    except FootballMatches.DoesNotExist:
+        return Response({"error": "Match not found!"}, status=status.HTTP_404_NOT_FOUND)
 
 
 """ Concrete View Classes

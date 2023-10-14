@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from users.models import NewUser
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -23,3 +24,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+    
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Dodaj pole is_staff do tokenów
+        token['is_staff'] = user.is_staff
+        token['username'] = user.user_name
+
+        return token

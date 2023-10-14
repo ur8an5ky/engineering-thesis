@@ -16,3 +16,8 @@ class GuessesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guesses
         fields = '__all__'
+
+class MatchUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FootballMatches
+        fields = ('id_match', 'score_hosts', 'score_visitors', 'toVerifyPoints')
