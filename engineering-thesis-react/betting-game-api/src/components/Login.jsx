@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axiosInstance from '../axios';
 import { useNavigate } from 'react-router-dom';
-//MaterialUI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: theme.palette.secondary.main,
 	},
 	form: {
-		width: '100%', // Fix IE 11 issue.
+		width: '100%',
 		marginTop: theme.spacing(1),
 	},
 	submit: {
@@ -54,20 +53,23 @@ export default function SignIn() {
 		e.preventDefault();
 		console.log(formData);
 
-		axiosInstance
-			.post(`token/`, {
+		setTimeout(() => {
+			axiosInstance
+			  .post(`token/`, {
 				email: formData.email,
 				password: formData.password,
-			})
-			.then((res) => {
+			  })
+			  .then((res) => {
 				localStorage.setItem('access_token', res.data.access);
 				localStorage.setItem('refresh_token', res.data.refresh);
 				axiosInstance.defaults.headers['Authorization'] =
-					'JWT ' + localStorage.getItem('access_token');
-                navigation('/my-guesses');
-				//console.log(res);
-				//console.log(res.data);
-			});
+				  'JWT ' + localStorage.getItem('access_token');
+				navigation('/my-guesses');
+			  })
+			  .catch((error) => {
+				console.error(error);
+			  });
+		  }, 1000);
 	};
 
 	const classes = useStyles();
