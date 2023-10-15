@@ -15,25 +15,28 @@ import GroupDetail from './components/GroupDetail';
 import CountryDetail from './components/CountryDetail';
 import MyGuesses from './components/MyGuesses';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { UserProvider } from './UserContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/matches" element={<Matches />} />
-        <Route path="/match/:id" element={<MatchDetail />} />
-        <Route path="/teams" element={<Teams />} />
-        <Route path="/team/:id" element={<TeamDetail />} />
-        <Route path="/group/:group" element={<GroupDetail />} />
-        <Route path="/country/:country" element={<CountryDetail />} />
-        <Route path="/my-guesses" element={<MyGuesses />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
-      </Routes>
-      <Footer />
+      <UserProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/matches" element={<Matches />} />
+          <Route path="/match/:id" element={<MatchDetail />} />
+          <Route path="/teams" element={<Teams />} />
+          <Route path="/team/:id" element={<TeamDetail />} />
+          <Route path="/group/:group" element={<GroupDetail />} />
+          <Route path="/country/:country" element={<CountryDetail />} />
+          <Route path="/my-guesses" element={<MyGuesses />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+        </Routes>
+        <Footer />
+      </UserProvider>
     </Router>
   </React.StrictMode>
 );

@@ -48,10 +48,12 @@ const footers = [
 	{
 		title: 'Clubs',
 		description: [
-			'List of clubs',
-			'Countries',
+		  <Link href="/teams" variant="allClubs" color="textSecondary">
+			List of clubs
+		  </Link>,
+		  'Countries',
 		],
-	},
+	  },
 ];
 
 function Footer() {
