@@ -78,6 +78,16 @@ class Country(APIView):
         serializer = TeamsSerializer(teams, many=True)
         return Response(serializer.data)
 
+class CountriesView(APIView):
+    permission_classes = [AllowAny]
+    http_method_names = ['get']
+
+    def get(self, request, format=None):
+        countries = FootballTeams.objects.values_list('country', flat=True).distinct()
+        return Response({
+            'countries': countries
+        })
+
 class GuessesList(APIView):
     authentication_classes = [JWTAuthentication] 
     permission_classes = [IsAuthenticated]
