@@ -24,13 +24,20 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Header />
         <Routes>
           <Route path="/" element={<App />} />
+
+          <Route path="/about-me" element={<App />} /> {/*default*/}
+          <Route path="/about-this-page" element={<App />} /> {/*default*/}
+          <Route path="/rules" element={<App />} /> {/*default*/}
+
           <Route path="/matches" element={<Matches />} />
           <Route path="/match/:id" element={<MatchDetail />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/team/:id" element={<TeamDetail />} />
           <Route path="/group/:group" element={<GroupDetail />} />
           <Route path="/country/:country" element={<CountryDetail />} />
+          
           <Route path="/my-guesses" element={<MyGuesses />} />
+
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />

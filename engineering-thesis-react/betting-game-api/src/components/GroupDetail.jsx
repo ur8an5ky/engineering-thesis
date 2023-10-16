@@ -1,5 +1,3 @@
-// engineering-thesis-react\betting-game-api\src\components\GroupDetail.jsx
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';

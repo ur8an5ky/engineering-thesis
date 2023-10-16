@@ -34,57 +34,95 @@ function Copyright() {
 
 const footers = [
 	{
-		title: 'Information',
-		description: ['About me', 'About this page', 'Rules'],
+	  title: 'Information',
+	  description: [
+		<Link href="/about-me" variant="subtitle1" color="textSecondary">
+		  About me
+		</Link>,
+		<Link href="/about-this-page" variant="subtitle1" color="textSecondary">
+		  About this page
+		</Link>,
+		<Link href="/rules" variant="subtitle1" color="textSecondary">
+		  Rules
+		</Link>,
+	  ],
 	},
 	{
-		title: 'Groups 1',
-		description: ['Group A', 'Group B', 'Group C', 'Group D'],
-	},
-    {
-		title: 'Groups 2',
-		description: ['Group E', 'Group F', 'Group G', 'Group H'],
+	  title: 'Groups 1',
+	  description: [
+		<Link href="/group/a" variant="subtitle1" color="textSecondary">
+		  Group A
+		</Link>,
+		<Link href="/group/b" variant="subtitle1" color="textSecondary">
+		  Group B
+		</Link>,
+		<Link href="/group/c" variant="subtitle1" color="textSecondary">
+		  Group C
+		</Link>,
+		<Link href="/group/d" variant="subtitle1" color="textSecondary">
+		  Group D
+		</Link>,
+	  ],
 	},
 	{
-		title: 'Clubs',
-		description: [
-		  <Link href="/teams" variant="allClubs" color="textSecondary">
-			List of clubs
-		  </Link>,
-		  'Countries',
-		],
-	  },
-];
+	  title: 'Groups 2',
+	  description: [
+		<Link href="/group/e" variant="subtitle1" color="textSecondary">
+		  Group E
+		</Link>,
+		<Link href="/group/f" variant="subtitle1" color="textSecondary">
+		  Group F
+		</Link>,
+		<Link href="/group/g" variant="subtitle1" color="textSecondary">
+		  Group G
+		</Link>,
+		<Link href="/group/h" variant="subtitle1" color="textSecondary">
+		  Group H
+		</Link>,
+	  ],
+	},
+	{
+	  title: 'Clubs',
+	  description: [
+		<Link href="/teams" variant="subtitle1" color="textSecondary">
+		  List of clubs
+		</Link>,
+		<Link href="/countries" variant="subtitle1" color="textSecondary">
+		  Countries
+		</Link>,
+	  ],
+	},
+  ];
+  
 
 function Footer() {
 	const classes = useStyles();
 	return (
 		<React.Fragment>
-			<Container maxWidth="md" component="footer" className={classes.footer}>
-				<Grid container spacing={4} justifyContent="space-evenly">
-					{footers.map((footer) => (
-						<Grid item xs={6} sm={3} key={footer.title}>
-							<Typography variant="h6" color="textPrimary" gutterBottom>
-								{footer.title}
-							</Typography>
-							<ul>
-								{footer.description.map((item) => (
-									<li key={item}>
-										<Link href="#" variant="subtitle1" color="textSecondary">
-											{item}
-										</Link>
-									</li>
-								))}
-							</ul>
-						</Grid>
+		<Container maxWidth="md" component="footer" className={classes.footer}>
+			<Grid container spacing={4} justifyContent="space-evenly">
+			{footers.map((footer) => (
+				<Grid item xs={6} sm={3} key={footer.title}>
+				<Typography variant="h6" color="textPrimary" gutterBottom>
+					{footer.title}
+				</Typography>
+				<ul>
+					{footer.description.map((item, index) => (
+					<li key={index}>
+						{item}
+					</li>
 					))}
+				</ul>
 				</Grid>
-				<Box mt={5}>
-					<Copyright />
-				</Box>
-			</Container>
+			))}
+			</Grid>
+			<Box mt={5}>
+			<Copyright />
+			</Box>
+		</Container>
 		</React.Fragment>
-	);
+);
 }
 
 export default Footer;
+  
