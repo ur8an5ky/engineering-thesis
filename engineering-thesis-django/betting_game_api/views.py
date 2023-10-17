@@ -48,6 +48,12 @@ class FootballMatchesList(generics.ListCreateAPIView):
     queryset = FootballMatches.fmobjects.all()
     serializer_class = MatchesSerializer
 
+    def get(self, request, *args, **kwargs):
+        all_matches = FootballMatches.fmobjects.all()
+        matches_serializer = MatchesSerializer(all_matches, many=True)
+
+        return Response(matches_serializer.data)
+
 class FootballMatchesDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminOrReadOnly]
     queryset = FootballMatches.objects.all()
