@@ -11,6 +11,7 @@ import axiosInstance from '../axios';
 
 const useStyles = makeStyles((theme) => ({
     card: {
+        position: 'relative',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
     },
     marginTop: {
-        marginTop: theme.spacing(4),
+        marginTop: theme.spacing(7),
     },
     header: {
         marginTop: theme.spacing(2),
@@ -32,7 +33,18 @@ const useStyles = makeStyles((theme) => ({
     },
     submitButton: {
         marginTop: theme.spacing(2),
-    }
+    },
+    matchId: {
+        position: 'absolute',
+        top: theme.spacing(8),
+        left: theme.spacing(1),
+        color: 'rgba(91, 91, 91, 0.065)',
+        backgroundColor: 'transparent',
+        padding: theme.spacing(0.5),
+        borderRadius: '4px',
+        fontSize: '4rem',
+        fontWeight: 'bold',
+      },
 }));
 
 const getTeamNameById = (teams, id) => {
@@ -107,11 +119,20 @@ const MyGuesses = () => {
                         <Grid item xs={5}>
                             <Card className={classes.card}>
                                 <CardContent className={classes.cardContent}>
+                                    <Typography className={classes.matchId}>
+                                        {match.id_match}
+                                    </Typography>
                                     <Typography gutterBottom variant="h6" component="h2" className={classes.centeredText}>
-                                        Match: {teamHostName} vs. {teamVisitorName}
+                                        {teamHostName}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary" className={classes.centeredText}>
+                                        {match.toVerifyPoints ? `${match.score_hosts} : ${match.score_visitors}` : ' vs '}
+                                    </Typography>
+                                    <Typography gutterBottom variant="h6" component="h2" className={classes.centeredText}>
+                                        {teamVisitorName}
                                     </Typography>
                                     <Typography className={classes.centeredText}>
-                                        Date: {new Date(match.start).toLocaleString()}
+                                        {new Date(match.start).toLocaleString('pl-PL', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })}
                                     </Typography>
                                 </CardContent>
                             </Card>

@@ -20,8 +20,11 @@ const Matches = () => {
     const apiUrl = 'http://localhost:8000/api/matches/';
     fetch(apiUrl)
       .then((data) => data.json())
-      .then((matches) => {
-        setAppState({ loading: false, matches: matches });
+      .then((response) => {
+        setAppState({ 
+          loading: false, 
+          matches: response,
+        });
       });
   }, []);
 

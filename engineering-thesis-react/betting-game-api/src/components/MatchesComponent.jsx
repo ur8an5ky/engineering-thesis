@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -20,6 +20,7 @@ import CheckIcon from '@mui/icons-material/Check';
 
 const useStyles = makeStyles((theme) => ({
   card: {
+    position: 'relative',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -52,6 +53,28 @@ const useStyles = makeStyles((theme) => ({
   modalBackdrop: {
     backgroundColor: 'white',
   },
+  matchId: {
+    position: 'absolute',
+    top: theme.spacing(1),
+    left: theme.spacing(1),
+    color: 'rgba(91, 91, 91, 0.065)',
+    backgroundColor: 'transparent',
+    padding: theme.spacing(0.5),
+    borderRadius: '4px',
+    fontSize: '8rem',
+    fontWeight: 'bold',
+  },
+  teamName: {
+    fontWeight: 'bold',
+    fontSize: '1.2rem',
+  },
+  scoreDisplay: {
+    fontSize: '1.5rem',
+    color: 'rgba(26, 26, 26, 0.6)',
+  },
+    halfWidthInput: {
+    width: '50%',
+  },
 }));
 
 const getPhaseHeader = (phase, index) => {
@@ -73,11 +96,12 @@ const getPhaseHeader = (phase, index) => {
 
 const MatchesComponent = ({ matches, isStaff }) => {
   const classes = useStyles();
+  const theme = useTheme();
   const navigation = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const [idHosts, setIdHosts] = useState(null);
-  const [idVisitors, setIdVisitors] = useState(null);
+  const [hostsName, setHostsName] = useState(null);
+  const [visitorsName, setVisitorsName] = useState(null);
   const [hostsScore, setHostsScore] = useState(0);
   const [visitorsScore, setVisitorsScore] = useState(0);
   const [matchFinished, setMatchFinished] = useState(false);
@@ -87,8 +111,8 @@ const MatchesComponent = ({ matches, isStaff }) => {
   };
 
   const handleEditClick = (match) => {
-    setIdHosts(match.id_hosts);
-    setIdVisitors(match.id_visitors);
+    setHostsName(match.hosts_name);
+    setVisitorsName(match.visitors_name);
     setOpen(true);
   };
 
@@ -115,6 +139,8 @@ const MatchesComponent = ({ matches, isStaff }) => {
           counter++;
           header = getPhaseHeader(currentPhase, counter);
         }
+        const phaseDisplay = match.phase.charAt(0).toUpperCase() + match.phase.slice(1) + 
+                     (match.match_group && /^[A-H]$/.test(match.match_group) ? ` ${match.match_group}` : '');
         return (
           <React.Fragment key={index}>
             {header && (
@@ -128,25 +154,31 @@ const MatchesComponent = ({ matches, isStaff }) => {
             )}
             <Card key={match.id_match} className={classes.card}>
               <CardContent className={classes.cardContent}>
-                <Typography
-                  gutterBottom
-                  variant="h6"
-                  component="h2"
-                  className={classes.centeredText}
-                >
-                  Match ID: {match.id_match}
+                <Typography className={classes.matchId}>
+                  {match.id_match}
+                </Typography>
+                <Grid container justifyContent="center" alignItems="center" spacing={2}>
+                  <Grid item xs={5} style={{ textAlign: 'right' }}>
+                    <Typography className={classes.teamName}>
+                      {match.hosts_name}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                  <Typography className={`${classes.centeredText} ${classes.scoreDisplay}`}>
+                    {match.toVerifyPoints ? `${match.score_hosts} : ${match.score_visitors}` : ' vs '}
+                  </Typography>
+                  </Grid>
+                  <Grid item xs={5} style={{ textAlign: 'left' }}>
+                    <Typography className={classes.teamName}>
+                      {match.visitors_name}
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Typography className={classes.centeredText}>
+                  {phaseDisplay}
                 </Typography>
                 <Typography className={classes.centeredText}>
-                  Match: {match.id_hosts} vs {match.id_visitors}
-                </Typography>
-                <Typography className={classes.centeredText}>
-                  Score: {match.score_hosts} - {match.score_visitors}
-                </Typography>
-                <Typography className={classes.centeredText}>
-                  Phase: {match.phase}
-                </Typography>
-                <Typography className={classes.centeredText}>
-                  Date: {new Date(match.start).toLocaleString()}
+                  {new Date(match.start).toLocaleString('pl-PL', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })}
                 </Typography>
                 <Grid
                   container
@@ -191,40 +223,48 @@ const MatchesComponent = ({ matches, isStaff }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogContent>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Typography variant="subtitle1">{idHosts}</Typography>
+      <DialogContent>
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item xs={4.5}>
+            <Typography variant="subtitle1">{hostsName}</Typography>
+          </Grid>
+          <Grid item xs={1}>
             <TextField
               autoFocus
               margin="dense"
               id="hostsScore"
               label=""
               type="number"
-              fullWidth
               inputProps={{ min: 0, max: 15, style: { textAlign: 'right' } }}
               value={hostsScore}
               onChange={(e) => setHostsScore(e.target.value)}
             />
-            <Typography variant="subtitle1" style={{ margin: '0 8px' }}>:</Typography>
+          </Grid>
+          <Grid item xs={1}>
+            <Typography variant="subtitle1" style={{ textAlign: 'center' }}>:</Typography>
+          </Grid>
+          <Grid item xs={1}>
             <TextField
               margin="dense"
               id="visitorsScore"
               label=""
               type="number"
-              fullWidth
               inputProps={{ min: 0, max: 15 }}
               value={visitorsScore}
               onChange={(e) => setVisitorsScore(e.target.value)}
             />
-            <Typography variant="subtitle1">{idVisitors}</Typography>
-          </div>
-          <FormControlLabel
-            control={<Checkbox checked={matchFinished} onChange={() => setMatchFinished(!matchFinished)} name="matchFinished" />}
-            label="Is match finished?"
-          />
-        </DialogContent>
+          </Grid>
+          <Grid item xs={4.5}>
+            <Typography variant="subtitle1">{visitorsName}</Typography>
+          </Grid>
+        </Grid>
+        <FormControlLabel
+          control={<Checkbox checked={matchFinished} onChange={() => setMatchFinished(!matchFinished)} name="matchFinished" />}
+          label="Is match finished?"
+        />
+      </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="success" variant="contained" startIcon={<CheckIcon />}>
+          <Button onClick={handleClose} style={{ backgroundColor: theme.palette.custom.myGreen, color: 'white' }} variant="contained" startIcon={<CheckIcon />}>
             Save
           </Button>
         </DialogActions>
