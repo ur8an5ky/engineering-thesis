@@ -17,6 +17,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import CheckIcon from '@mui/icons-material/Check';
+import axiosInstance from '../axios';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -36,19 +37,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
     fontWeight: 'bold',
-  },
-  modalContent: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    backgroundColor: 'white',
-    padding: theme.spacing(2),
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    outline: 'none',
-    width: '50%',
-    textAlign: 'center',
   },
   modalBackdrop: {
     backgroundColor: 'white',
@@ -77,6 +65,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const updateScore = (matchId, hostScore, visitorScore, isFinished) => {
+  axiosInstance.put(`update-match/${matchId}/`, {
+      score_hosts: hostScore,
+      score_visitors: visitorScore,
+      toVerifyPoints: isFinished,
+  })
+  .then(response => {
+      console.log("Guess updated successfully:", response.data);
+  })
+  .catch(error => {
+      console.error("Error updating guess:", error);
+  });
+}
+
+
 const getPhaseHeader = (phase, index) => {
   switch (phase) {
     case 'group':
@@ -99,7 +102,7 @@ const MatchesComponent = ({ matches, isStaff }) => {
   const theme = useTheme();
   const navigation = useNavigate();
   const [open, setOpen] = useState(false);
-
+  const [currentMatchId, setCurrentMatchId] = useState(null);
   const [hostsName, setHostsName] = useState(null);
   const [visitorsName, setVisitorsName] = useState(null);
   const [hostsScore, setHostsScore] = useState(0);
@@ -111,6 +114,7 @@ const MatchesComponent = ({ matches, isStaff }) => {
   };
 
   const handleEditClick = (match) => {
+    setCurrentMatchId(match.id_match);
     setHostsName(match.hosts_name);
     setVisitorsName(match.visitors_name);
     setOpen(true);
@@ -264,9 +268,16 @@ const MatchesComponent = ({ matches, isStaff }) => {
         />
       </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} style={{ backgroundColor: theme.palette.custom.myGreen, color: 'white' }} variant="contained" startIcon={<CheckIcon />}>
+        <Button 
+            variant="contained" 
+            style={{ backgroundColor: theme.palette.custom.myGreen, color: 'white' }}
+            className={classes.submitButton}
+            startIcon={<CheckIcon />}
+            onClick={() => {
+                updateScore(currentMatchId, hostsScore, visitorsScore, matchFinished);
+            }}>
             Save
-          </Button>
+        </Button>
         </DialogActions>
       </Dialog>
     </Container>

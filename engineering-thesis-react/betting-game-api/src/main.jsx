@@ -60,6 +60,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Footer />
         </UserProvider>
       </Router>
-    </ThemeProvider> {/* Koniec dodawania ThemeProvider */}
+    </ThemeProvider>
   </React.StrictMode>
 );

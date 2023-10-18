@@ -72,7 +72,7 @@ export default function Login() {
         .catch((error) => {
           console.error(error);
         });
-    }, 1000);
+    }, 500);
   };
 
   const classes = useStyles();
