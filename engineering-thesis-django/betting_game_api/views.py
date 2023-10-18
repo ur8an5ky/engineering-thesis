@@ -155,9 +155,9 @@ def update_match(request, match_id):
     try:
         match = FootballMatches.objects.get(id_match=match_id)
         
-        # Updating the match based on incoming data
         match.score_hosts = request.data.get('score_hosts')
         match.score_visitors = request.data.get('score_visitors')
+        match.toVerifyPoints = request.data.get('toVerifyPoints')
         match.save()
         
         return Response({"message": "Match updated successfully!"}, status=status.HTTP_200_OK)

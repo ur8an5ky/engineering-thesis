@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (FootballTeamsList, FootballTeamsDetail, FootballMatchesList, FootballMatchesDetail, 
-                    Group, Country, GuessesList, MatchUpdateView, CountriesView, add_guess, update_guess)
+                    Group, Country, GuessesList, MatchUpdateView, CountriesView, add_guess, update_guess, update_match)
 
 app_name = 'betting_game_api'
 
@@ -14,6 +14,6 @@ urlpatterns = [
     path('my-guesses/', GuessesList.as_view(), name='my-guesses'),
     path('add-guess/', add_guess, name='add-guess'),
     path('update-guess/<int:match_id>/', update_guess, name='update-guess'),
-    path('edit-match/<int:pk>/', MatchUpdateView.as_view(), name='edit-match'),
+    path('update-match/<int:match_id>/', update_match, name='update-match'),
     path('countries/', CountriesView.as_view(), name='countries'),
 ]
