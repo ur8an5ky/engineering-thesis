@@ -73,6 +73,7 @@ const updateScore = (matchId, hostScore, visitorScore, isFinished) => {
   })
   .then(response => {
       console.log("Guess updated successfully:", response.data);
+      window.location.reload();
   })
   .catch(error => {
       console.error("Error updating guess:", error);

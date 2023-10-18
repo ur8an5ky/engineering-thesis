@@ -60,6 +60,7 @@ const submitGuess = (matchId, hostScore, visitorScore) => {
     })
     .then(response => {
         console.log("Guess added successfully:", response.data);
+        window.location.reload();
     })
     .catch(error => {
         console.error("Error adding guess:", error);
@@ -73,6 +74,7 @@ const updateGuess = (matchId, hostScore, visitorScore) => {
     })
     .then(response => {
         console.log("Guess updated successfully:", response.data);
+        window.location.reload();
     })
     .catch(error => {
         console.error("Error updating guess:", error);
