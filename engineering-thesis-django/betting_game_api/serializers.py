@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from betting_game.models import FootballTeams, FootballMatches, Penalties, Guesses
-
+from users.models import NewUser
+from django.db.models import Sum
 
 class TeamsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,3 +41,13 @@ class MatchUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = FootballMatches
         fields = ('id_match', 'score_hosts', 'score_visitors', 'toVerifyPoints')
+
+class UserPointsSerializer(serializers.ModelSerializer):
+    points = serializers.SerializerMethodField()
+
+    class Meta:
+        model = NewUser
+        fields = ('id', 'user_name', 'points')
+
+    def get_points(self, obj):
+        return Guesses.objects.filter(user=obj).aggregate(Sum('points'))['points__sum'] or 0

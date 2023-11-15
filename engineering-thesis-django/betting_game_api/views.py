@@ -5,9 +5,9 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import BasePermission, IsAdminUser, IsAuthenticated, AllowAny, BasePermission, SAFE_METHODS
 from rest_framework.decorators import api_view, permission_classes
 from betting_game.models import FootballMatches, FootballTeams, Penalties, Guesses
-from django.db.models import Q
-from .serializers import TeamsSerializer, MatchesSerializer, GuessesSerializer, MatchUpdateSerializer
-
+from django.db.models import Q, Sum, Case, When, F, Value, IntegerField, ExpressionWrapper
+from .serializers import TeamsSerializer, MatchesSerializer, GuessesSerializer, MatchUpdateSerializer, UserPointsSerializer
+from users.models import NewUser
 class IsAdminOrReadOnly(BasePermission):
     """
     The request is authenticated as an admin, or is a read-only request.
@@ -154,34 +154,48 @@ def update_guess(request, match_id):
 def update_match(request, match_id):
     try:
         match = FootballMatches.objects.get(id_match=match_id)
-        
-        match.score_hosts = request.data.get('score_hosts')
-        match.score_visitors = request.data.get('score_visitors')
-        match.toVerifyPoints = request.data.get('toVerifyPoints')
+        scoreH = match.score_hosts = request.data.get('score_hosts')
+        scoreV = match.score_visitors = request.data.get('score_visitors')
+        toVerify = match.toVerifyPoints = request.data.get('toVerifyPoints')
         match.save()
-        
+
+        if toVerify:
+            guesses = Guesses.objects.filter(id_match=match_id)
+            
+            # Aktualizowanie punktów
+            for guess in guesses:
+                points = 0
+                if guess.guess_hosts_score == scoreH:
+                    points += 1
+                if guess.guess_visitors_score == scoreV:
+                    points += 1
+                if ((scoreH > scoreV and guess.guess_hosts_score > guess.guess_visitors_score) or
+                    (scoreH < scoreV and guess.guess_hosts_score < guess.guess_visitors_score) or
+                    (scoreH == scoreV and guess.guess_hosts_score == guess.guess_visitors_score)):
+                    points += 2
+                if points == 4:
+                    points += 1
+                Guesses.objects.filter(id=guess.id).update(points=points)
+
         return Response({"message": "Match updated successfully!"}, status=status.HTTP_200_OK)
     except FootballMatches.DoesNotExist:
         return Response({"error": "Match not found!"}, status=status.HTTP_404_NOT_FOUND)
 
+class UserTotalPoints(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get']
 
-""" Concrete View Classes
-#CreateAPIView
-Used for create-only endpoints.
-#ListAPIView
-Used for read-only endpoints to represent a collection of model instances.
-#RetrieveAPIView
-Used for read-only endpoints to represent a single model instance.
-#DestroyAPIView
-Used for delete-only endpoints for a single model instance.
-#UpdateAPIView
-Used for update-only endpoints for a single model instance.
-##ListCreateAPIView
-Used for read-write endpoints to represent a collection of model instances.
-RetrieveUpdateAPIView
-Used for read or update endpoints to represent a single model instance.
-#RetrieveDestroyAPIView
-Used for read or delete endpoints to represent a single model instance.
-#RetrieveUpdateDestroyAPIView
-Used for read-write-delete endpoints to represent a single model instance.
-"""
+    def get(self, request, format=None):
+        total_points = Guesses.objects.filter(user=request.user).aggregate(total=Sum('points'))['total']
+        return Response({'total_points': total_points or 0})
+
+class UserPointsView(APIView):
+    def get(self, request):
+        user_ids_with_guesses = Guesses.objects.values_list('user', flat=True).distinct()
+        users_with_guesses = NewUser.objects.filter(id__in=user_ids_with_guesses).annotate(
+            total_points=Sum('user_guesses__points')
+        ).order_by('-total_points')
+        
+        serializer = UserPointsSerializer(users_with_guesses, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
