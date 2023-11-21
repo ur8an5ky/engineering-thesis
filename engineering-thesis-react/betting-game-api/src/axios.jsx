@@ -17,7 +17,8 @@ const axiosInstance = axios.create({
 // Interceptor to log requests
 axiosInstance.interceptors.request.use(
     (config) => {
-        console.log('Starting Request:', JSON.stringify(config, null, 2));
+        const { url, method, headers } = config;
+        console.log(`Starting Request: ${method.toUpperCase()} ${url}`, { headers });
         return config;
     },
     (error) => {
