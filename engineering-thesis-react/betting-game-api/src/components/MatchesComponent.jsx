@@ -18,6 +18,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import CheckIcon from '@mui/icons-material/Check';
 import axiosInstance from '../axios';
+import { decodeJWT } from '../utility';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -119,6 +120,18 @@ const MatchesComponent = ({ matches, isStaff }) => {
     setHostsName(match.hosts_name);
     setVisitorsName(match.visitors_name);
     setOpen(true);
+  };
+
+  const handleSave = () => {
+    const token = localStorage.getItem('access_token');
+    const decodedToken = decodeJWT(token);
+    const userId = decodedToken ? decodedToken.user_id : null;
+    
+    if (userId) {
+      updateScore(currentMatchId, hostsScore, visitorsScore, matchFinished);
+    } else {
+      console.error("User ID not found in token");
+    }
   };
 
   if (!matches || matches.length === 0)
@@ -229,7 +242,7 @@ const MatchesComponent = ({ matches, isStaff }) => {
         aria-describedby="alert-dialog-description"
       >
       <DialogContent>
-        <Grid container alignItems="center" justify="space-between">
+        <Grid container alignItems="center" justifyContent="space-between">
           <Grid item xs={4.5}>
             <Typography variant="subtitle1">{hostsName}</Typography>
           </Grid>
@@ -274,9 +287,7 @@ const MatchesComponent = ({ matches, isStaff }) => {
             style={{ backgroundColor: theme.palette.custom.myGreen, color: 'white' }}
             className={classes.submitButton}
             startIcon={<CheckIcon />}
-            onClick={() => {
-                updateScore(currentMatchId, hostsScore, visitorsScore, matchFinished);
-            }}>
+            onClick={handleSave}>
             Save
         </Button>
         </DialogActions>
