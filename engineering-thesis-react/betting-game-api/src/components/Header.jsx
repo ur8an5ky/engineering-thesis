@@ -18,6 +18,8 @@ import Button from '@material-ui/core/Button';
 import UserContext from '../UserContext';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
+import axiosInstance from '../axios';
+import logo from '/logo.png';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -94,6 +96,8 @@ function Header() {
               </Grow>
             )}
           </Popper>
+
+          <img src={logo} alt="Logo" style={{ height: '50px', marginRight: '20px' }} />
 
           <Typography variant="h6" color="inherit" className={classes.title}>
             <Link component={NavLink} to="/" underline="none" color="textPrimary">
