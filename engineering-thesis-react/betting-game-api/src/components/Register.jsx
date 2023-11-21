@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axiosInstance from '../axios';
 import { useNavigate } from 'react-router-dom';
-//MaterialUI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -40,22 +39,26 @@ export default function SignUp() {
 		email: '',
 		username: '',
 		password: '',
+		confirmPassword: '',
 	});
 
 	const [formData, updateFormData] = useState(initialFormData);
+	const [error, setError] = useState('');
 
 	const handleChange = (e) => {
 		updateFormData({
 			...formData,
-			// Trimming any whitespace
 			[e.target.name]: e.target.value.trim(),
 		});
 	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(formData);
-
+		if (formData.password !== formData.confirmPassword) {
+			setError('Passwords do not match!');
+			return;
+		}
+		setError('');
 		axiosInstance
 			.post(`user/register/`, {
 				email: formData.email,
@@ -118,6 +121,20 @@ export default function SignUp() {
 								onChange={handleChange}
 							/>
 						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								variant="outlined"
+								required
+								fullWidth
+								name="confirmPassword"
+								label="Potwierdź hasło"
+								type="password"
+								id="confirm-password"
+								autoComplete="new-password"
+								onChange={handleChange}
+							/>
+						</Grid>
+						{error && <div style={{ color: 'red' }}>{error}</div>}
 						<Grid item xs={12}>
 							<FormControlLabel
 								control={<Checkbox value="allowExtraEmails" color="primary" />}
