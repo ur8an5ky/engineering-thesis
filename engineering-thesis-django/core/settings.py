@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
 
@@ -25,8 +26,14 @@ SECRET_KEY = 'django-insecure-mfsq!_jch16s&)0zv2=64^_5!tsd2-f=37-1(yqz@v7-m)fwcg
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
+
+
+# Do produkcji:
+# DEBUG = False
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # Application definition
