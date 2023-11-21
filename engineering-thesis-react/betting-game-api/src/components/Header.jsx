@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -23,19 +23,47 @@ import logo from '/logo.png';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    backgroundColor: '#a3a3a3',
+    backgroundColor: '#d5dcf2',
     width: '100%',
     top: 0,
   },
   title: {
     flexGrow: 1,
+    fontWeight: 500,
   },
   link: {
     margin: theme.spacing(1, 1.5),
   },
+  userNameContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   userName: {
     fontWeight: 'bold',
     color: 'rgba(26, 26, 26, 1)',
+  },
+  userDetail: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center', 
+    marginRight: theme.spacing(2),
+  },
+  smallText: {
+    fontSize: '0.7rem',
+    color: 'rgba(222, 222, 222, 1)',
+    textAlign: 'center',
+    marginRight: theme.spacing(1),
+  },
+  smallTextPoints: {
+    fontSize: '0.85rem',
+    fontWeight: 'bold',
+    color: 'rgba(88, 88, 88, 1)',
+    textAlign: 'center',
+    marginRight: theme.spacing(1),
+  },
+  pointsContainer: {
+    display: 'flex',
+    alignItems: 'center',
   },
 }));
 
@@ -43,7 +71,8 @@ function Header() {
   const { user } = useContext(UserContext);
   const classes = useStyles();
   const theme = useTheme();
-  const [openMenu, setOpenMenu] = React.useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [userPoints, setUserPoints] = useState(0);
   const anchorRef = React.useRef(null);
 
   const handleToggle = () => {
@@ -56,6 +85,18 @@ function Header() {
     }
     setOpenMenu(false);
   };
+
+  useEffect(() => {
+    if (user) {
+      axiosInstance.get('user-total-points/')
+        .then((response) => {
+          setUserPoints(response.data.total_points);
+        })
+        .catch((error) => {
+          console.error('Error fetching user points:', error);
+        });
+    }
+  }, [user]);  
 
   return (
     <React.Fragment>
@@ -76,7 +117,7 @@ function Header() {
           <Popper open={openMenu} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
             {({ TransitionProps, placement }) => (
               <Grow {...TransitionProps} style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}>
-                <Paper>
+                <Paper className={classes.menuPaper}>
                   <ClickAwayListener onClickAway={handleClose}>
                     <MenuList autoFocusItem={openMenu} id="menu-list-grow">
                       <MenuItem onClick={handleClose} component={NavLink} to="/matches">
@@ -90,6 +131,9 @@ function Header() {
                           My Guesses
                         </MenuItem>
                       )}
+                      <MenuItem onClick={handleClose} component={NavLink} to="/user-points">
+                        Ranking
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
@@ -106,14 +150,29 @@ function Header() {
           </Typography>
           {user ? (
             <React.Fragment>
-              <Typography variant="body2" color="textPrimary" className={classes.link}>
-                You are logged in as:
-              </Typography>
-              <Typography className={classes.userName}>
-                {user.username}
-              </Typography>
+              <div className={classes.userDetail}>
+                <div className={classes.userNameContainer}>
+                  <Typography variant="body2" color="textPrimary" className={classes.link}>
+                    You are logged in as:
+                  </Typography>
+                  <Typography className={classes.userName}>
+                    {user.username}
+                  </Typography>
+                </div>
+                <div className={classes.pointsContainer}>
+                  <Typography className={classes.smallText}>
+                      You have
+                  </Typography>
+                  <Typography className={classes.smallTextPoints}>
+                      {userPoints}
+                  </Typography>
+                  <Typography className={classes.smallText}>
+                      points!
+                  </Typography>
+                </div>
+              </div>
               <Button href="#" style={{ borderColor: theme.palette.custom.myRed, color: theme.palette.custom.myRed }}
-                  variant="outlined" endIcon={<LogoutIcon />} className={classes.link} component={NavLink} to="/logout">
+                      variant="outlined" endIcon={<LogoutIcon />} className={classes.link} component={NavLink} to="/logout">
                 Logout
               </Button>
             </React.Fragment>

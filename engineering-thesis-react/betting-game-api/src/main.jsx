@@ -15,6 +15,7 @@ import GroupDetail from './components/GroupDetail';
 import Countries from './components/Countries';
 import CountryDetail from './components/CountryDetail';
 import MyGuesses from './components/MyGuesses';
+import UserPointsTable from './components/UserPointsTable';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { UserProvider } from './UserContext';
 import { ThemeProvider, createTheme } from '@material-ui/core/styles';
@@ -51,6 +52,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/countries" element={<Countries />} />
             <Route path="/country/:country" element={<CountryDetail />} />
             
+            <Route path="/user-points" element={<UserPointsTable />} />
             <Route path="/my-guesses" element={<MyGuesses />} />
 
             <Route path="/register" element={<Register />} />
