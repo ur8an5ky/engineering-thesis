@@ -12,6 +12,7 @@ function App() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     refContainer.current.appendChild(renderer.domElement);
 
+    // Ustawienia początkowe kamery
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight
@@ -20,7 +21,7 @@ function App() {
     camera.lookAt(0, 0, 0);
 
     const controls = new OrbitControls(camera, renderer.domElement);
-    // Ograniczenie przybliżania i oddalania, wielkość pola z trawą itp.
+    // Ograniczenie przybliżania i oddalania itp.
     controls.enableDamping = true;
     controls.enablePan = false;
     controls.maxPolarAngle = Math.PI / 2.2;
