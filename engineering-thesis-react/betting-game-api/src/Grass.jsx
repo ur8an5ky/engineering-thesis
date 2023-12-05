@@ -43,7 +43,7 @@ export class GrassGeometry extends THREE.BufferGeometry {
       indices.push(...blade.indices)
     }
 
-    // Ustawianie atrybutów i obliczanie normalnych dla oświetlenia
+    // Ustawianie atrybutów itp.
     this.setAttribute(
       'position',
       new THREE.BufferAttribute(new Float32Array(positions), 3)
