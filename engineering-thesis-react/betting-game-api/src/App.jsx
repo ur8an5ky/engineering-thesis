@@ -60,6 +60,7 @@ function App() {
       scene.add(cylinder);
     });
 
+    // Animacja
     renderer.setAnimationLoop((time) => {
       grass.update(time);
       controls.update();

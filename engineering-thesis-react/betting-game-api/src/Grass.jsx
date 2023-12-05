@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import { vertexShader, fragmentShader } from './shaders'
 
+// Geometria trawy
 const BLADE_WIDTH = 0.1
 const BLADE_HEIGHT = 0.15
 const BLADE_HEIGHT_VARIATION = 0.1125
 const BLADE_VERTEX_COUNT = 5
 const BLADE_TIP_OFFSET = 0.1
 
+// Funkcja do interpolacji
 function interpolate(val, oldMin, oldMax, newMin, newMax) {
   return ((val - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin
 }
@@ -19,6 +21,7 @@ export class GrassGeometry extends THREE.BufferGeometry {
     const uvs = []
     const indices = []
 
+    // Tworzenie każdego źdźbła trawy
     for (let i = 0; i < count; i++) {
       const surfaceMin = (size / 2) * -1
       const surfaceMax = size / 2
@@ -40,6 +43,7 @@ export class GrassGeometry extends THREE.BufferGeometry {
       indices.push(...blade.indices)
     }
 
+    // Ustawianie atrybutów i obliczanie normalnych dla oświetlenia
     this.setAttribute(
       'position',
       new THREE.BufferAttribute(new Float32Array(positions), 3)
@@ -49,7 +53,7 @@ export class GrassGeometry extends THREE.BufferGeometry {
     this.computeVertexNormals()
   }
 
-
+  // Funkcja tworząca pojedyncze źdźbło trawy
   computeBlade(center, index = 0) {
     const height = BLADE_HEIGHT + Math.random() * BLADE_HEIGHT_VARIATION
     const vIndex = index * BLADE_VERTEX_COUNT
@@ -99,6 +103,7 @@ class Grass extends THREE.Mesh {
     })
     super(geometry, material)
 
+    // Dodanie podłoża
     const floor = new THREE.Mesh(
       new THREE.CircleGeometry(30, 8).rotateX(Math.PI / 2),
       material

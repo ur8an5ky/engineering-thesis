@@ -32,13 +32,13 @@ export const fragmentShader = /* glsl */ `
   varying vec2 vUv;
   varying vec3 vNormal;
 
-  vec3 green = vec3(0.2, 0.6, 0.3); // Podstawowy kolor zielony
-  vec3 yellow = vec3(0.8, 0.8, 0.2); // Dodanie żółtego koloru
-  vec3 white = vec3(1.0, 1.0, 1.0); // Biały kolor
+  vec3 green = vec3(0.2, 0.6, 0.3);
+  vec3 yellow = vec3(0.8, 0.8, 0.2);
+  vec3 white = vec3(1.0, 1.0, 1.0);
 
   void main() {
-    vec3 color = mix(green, yellow, 0.4); // Mieszanie zielonego z odrobiną żółtego
-    color = mix(color, white, 0.3); // Dodanie odrobiny bieli do mieszanki
+    vec3 color = mix(green, yellow, 0.4);
+    color = mix(color, white, 0.3);
     color = mix(color, color * 0.7, vPosition.y);
 
     float lighting = normalize(dot(vNormal, vec3(10)));
