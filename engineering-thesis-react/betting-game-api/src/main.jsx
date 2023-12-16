@@ -38,11 +38,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <UserProvider>
           <Header />
           <Routes>
-            <Route path="/" element={<App />} />
+            {/* <Route path="/" element={<App />} /> */}
 
-            <Route path="/about-me" element={<App />} /> {/*default*/}
-            <Route path="/about-this-page" element={<App />} /> {/*default*/}
-            <Route path="/rules" element={<App />} /> {/*default*/}
+            {/* <Route path="/about-me" element={<App />} />*/}{/* default */}
+            {/* <Route path="/about-this-page" element={<App />} />*/}{/* default */}
+            {/* <Route path="/rules" element={<App />} />*/}{/* default */}
+
+            <Route path="/" element={<Matches />} />
 
             <Route path="/matches" element={<Matches />} />
             <Route path="/match/:id" element={<MatchDetail />} />
