@@ -29,7 +29,8 @@ const UserPointsTable = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/user-points/')
+    fetch('http://localhost/api/user-points/')
+    // fetch('http://localhost:8000/api/user-points/')
       .then((response) => response.json())
       .then((data) => {
         setUsers(data);

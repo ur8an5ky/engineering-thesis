@@ -127,7 +127,7 @@ export default function SignUp() {
 								required
 								fullWidth
 								name="confirmPassword"
-								label="Potwierdź hasło"
+								label="Confirm Password"
 								type="password"
 								id="confirm-password"
 								autoComplete="new-password"

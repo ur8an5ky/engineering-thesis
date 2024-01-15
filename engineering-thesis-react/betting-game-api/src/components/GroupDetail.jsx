@@ -28,7 +28,8 @@ const GroupDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/group/${group}/`)
+    fetch(`http://localhost/api/group/${group}/`)
+    // fetch(`http://localhost:8000/api/group/${group}/`)
       .then((response) => response.json())
       .then((data) => {
         setGroupDetail(data);

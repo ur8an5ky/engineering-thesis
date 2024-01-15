@@ -17,7 +17,8 @@ const Matches = () => {
 
   useEffect(() => {
     setAppState({ loading: true });
-    const apiUrl = 'http://localhost:8000/api/matches/';
+    // const apiUrl = 'http://localhost:8000/api/matches/';
+    const apiUrl = 'https://localhost/api/matches/';
     fetch(apiUrl)
       .then((data) => data.json())
       .then((response) => {

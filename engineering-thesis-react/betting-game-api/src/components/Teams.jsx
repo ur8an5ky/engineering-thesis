@@ -32,7 +32,8 @@ const Teams = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/teams/')
+    fetch('http://localhost/api/teams/')
+    // fetch('http://localhost:8000/api/teams/')
       .then((response) => response.json())
       .then((data) => {
         setTeams(data);

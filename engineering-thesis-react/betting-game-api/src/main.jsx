@@ -51,7 +51,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/teams" element={<Teams />} />
             <Route path="/team/:id" element={<TeamDetail />} />
             <Route path="/group/:group" element={<GroupDetail />} />
-            <Route path="/countries" element={<Countries />} />
+            <Route path="/abba" element={<Countries />} />
             <Route path="/country/:country" element={<CountryDetail />} />
             
             <Route path="/user-points" element={<UserPointsTable />} />
