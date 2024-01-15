@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  django:
+    build: ./engineering-thesis-django
+    volumes:
+      - ./engineering-thesis-django:/app
+    ports:
+      - "8000:8000"
+    container_name: engineering-thesis-django
+
+  react:
+    build: ./engineering-thesis-react/betting-game-api
+    ports:
+      - "8080:80"
+    container_name: engineering-thesis-react
+    depends_on:
+      - django

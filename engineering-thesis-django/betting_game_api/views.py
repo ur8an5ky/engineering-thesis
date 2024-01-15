@@ -8,6 +8,7 @@ from betting_game.models import FootballMatches, FootballTeams, Penalties, Guess
 from django.db.models import Q, Sum, Case, When, F, Value, IntegerField, ExpressionWrapper
 from .serializers import TeamsSerializer, MatchesSerializer, GuessesSerializer, MatchUpdateSerializer, UserPointsSerializer
 from users.models import NewUser
+
 class IsAdminOrReadOnly(BasePermission):
     """
     The request is authenticated as an admin, or is a read-only request.
