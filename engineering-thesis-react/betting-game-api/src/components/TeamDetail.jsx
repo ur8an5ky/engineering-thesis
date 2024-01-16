@@ -28,8 +28,8 @@ const TeamDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost/api/team/${id}/`)
-    // fetch(`http://localhost:8000/api/team/${id}/`)
+    // fetch(`http://localhost/api/team/${id}/`)
+    fetch(`http://localhost:8000/api/team/${id}/`)
       .then((response) => response.json())
       .then((data) => {
         setTeamDetail(data);

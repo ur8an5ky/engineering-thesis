@@ -1,4 +1,3 @@
-// fetch(`http://localhost:8000/api/match/${id}/`)
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Typography, Grid, Card, CardContent, makeStyles } from '@material-ui/core';
@@ -39,10 +38,11 @@ const MatchDetail = () => {
   const { id } = useParams();
   const [match, setMatch] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
-    fetch(`http://localhost/api/match/${id}/`)
-      .then((response) => response.json())
+    fetch(`http://localhost:8000/api/match/${id}/`)
+    // fetch(`http://localhost/api/match/${id}/`)
+    .then((response) => response.json())
       .then((data) => {
         setMatch(data);
         setLoading(false);

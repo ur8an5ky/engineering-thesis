@@ -28,8 +28,8 @@ const CountryDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost/api/country/${country}/`)
-    // fetch(`http://localhost:8000/api/country/${country}/`)
+    // fetch(`http://localhost/api/country/${country}/`)
+    fetch(`http://localhost:8000/api/country/${country}/`)
       .then((response) => response.json())
       .then((data) => {
         const sortedTeams = data.sort((a, b) => {

@@ -35,8 +35,8 @@ const Countries = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost/api/countries/')
-        // fetch('http://localhost:8000/api/countries/')
+        // fetch('http://localhost/api/countries/')
+        fetch('http://localhost:8000/api/countries/')
             .then((response) => response.json())
             .then((data) => {
                 setCountries(data.countries);
