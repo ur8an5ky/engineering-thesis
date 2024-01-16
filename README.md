@@ -11,7 +11,7 @@ git clone https://github.com/ur8an5ky/engineering-thesis.git
 docker compose up
 ```
 
-Once the application is correctly launched using `Gunicorn` and `Nginx`, it is available on: [localhost:8080](localhost:8080)
+Once the application is correctly launched using `Gunicorn` and `Nginx`, it is available on: [localhost:8080](http://localhost:8080)
 
 ### `docker-compose.yml` file explanation:
 ```yaml
