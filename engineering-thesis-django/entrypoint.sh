@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Check the Django environment variable
 if [ "$DJANGO_ENV" = "development" ]; then
   echo "Starting Django development server..."
   python manage.py runserver 0.0.0.0:8000
